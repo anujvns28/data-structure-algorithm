@@ -1,0 +1,28 @@
+// Online C++ compiler to run C++ program online
+#include <iostream>
+using namespace std;
+
+void permutation(string&str,int index){
+    // base case
+    if(index>=str.size()){
+        cout << str << " " ;
+        return;
+    }
+    
+    for(int j = index;j<str.size();j++){
+        //swaping 
+        swap(str[index],str[j]);
+        // recursion
+        permutation(str,index+1);
+        // backtracking
+        swap(str[index],str[j]);
+    }
+}
+
+int main() {
+    string str = "abcd";
+    
+    permutation(str,0);
+
+    return 0;
+}
