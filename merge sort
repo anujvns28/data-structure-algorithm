@@ -1,0 +1,87 @@
+class Solution {
+public:
+    void merge(vector<int>&nums,int s,int e){
+        int mid = (s+e)/2;
+        
+        // finding size of both array
+        int leftVectorSize = mid-s + 1;
+        int rightVectorSize = e - mid;
+
+        // dynamicly creating arrays
+        int *leftArr = new int[leftVectorSize];
+        int *rightArr = new int[rightVectorSize];
+        
+        int k = s;
+        //coping in left arr
+        for(int i=0;i<leftVectorSize;i++){
+            leftArr[i] = nums[k];
+            k++;
+        }
+        
+        // coping in right Arr
+        for(int i = 0;i<rightVectorSize;i++){
+            rightArr[i] = nums[k];
+            k++;
+        }
+        
+
+        int left = 0;
+        int right = 0;
+        int main = s;
+        
+        // merging elements
+        while(left<leftVectorSize && right<rightVectorSize){
+            if(leftArr[left]>rightArr[right]){
+                nums[main] = rightArr[right];
+                right++;
+                main++;
+            }
+            else{
+                nums[main] = leftArr[left];
+                left++;
+                main++;
+            }
+        }
+
+
+       // remeainng element 
+        while(left<leftVectorSize){
+            nums[main] = leftArr[left];
+            left++;
+            main++;
+        }
+
+        while(right<rightVectorSize){
+            nums[main] = rightArr[right];
+            right++;
+            main++;
+        }
+        
+        //free heap memory
+        delete[] leftArr;
+        delete[] rightArr;
+
+    }
+    void divideArray(vector<int>& nums,int s,int e){
+        // base case
+        if(s>=e) return;
+
+        int mid = (s+e)/2;
+
+        divideArray(nums,s,mid);
+        divideArray(nums,mid+1,e);
+        
+        // merge sorted arrays
+        merge(nums,s,e);
+    }
+
+    vector<int> sortArray(vector<int>& nums) {
+        int s = 0;
+        int e = nums.size()-1;
+        
+        //divide Arrays
+        divideArray(nums,s,e);
+
+        return nums;
+    }
+};
