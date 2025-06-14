@@ -1,0 +1,76 @@
+class Solution {
+public:
+    bool isSafe(vector<vector<int>>& maze, int srcx, int srcy, vector<vector<bool>>& visited) {
+        if ((srcx >= 0 && srcx < maze.size()) &&
+            (srcy >= 0 && srcy < maze[0].size()) &&
+            (visited[srcx][srcy] == false) &&
+            (maze[srcx][srcy] == 1)) {
+            return true;
+        }
+        return false;
+    }
+
+    void allPossiblePath(vector<vector<int>>& maze, int srcx, int srcy, vector<vector<bool>>& visited, vector<string>& ans, string& output) {
+        // base case
+        if (srcx == maze.size() - 1 && srcy == maze[0].size() - 1) {
+            ans.push_back(output);
+            return;
+        }
+
+        // ✅ Mark the current cell as visited
+        visited[srcx][srcy] = true;
+
+        // 🚩 Correct order: Down, Left, Right, Up (DLRU)
+
+        // Move Down
+        int newx = srcx + 1;
+        int newy = srcy;
+        if (isSafe(maze, newx, newy, visited)) {
+            output.push_back('D');
+            allPossiblePath(maze, newx, newy, visited, ans, output);
+            output.pop_back();
+        }
+
+        // Move Left
+        newx = srcx;
+        newy = srcy - 1;
+        if (isSafe(maze, newx, newy, visited)) {
+            output.push_back('L');
+            allPossiblePath(maze, newx, newy, visited, ans, output);
+            output.pop_back();
+        }
+
+        // Move Right
+        newx = srcx;
+        newy = srcy + 1;
+        if (isSafe(maze, newx, newy, visited)) {
+            output.push_back('R');
+            allPossiblePath(maze, newx, newy, visited, ans, output);
+            output.pop_back();
+        }
+
+        // Move Up
+        newx = srcx - 1;
+        newy = srcy;
+        if (isSafe(maze, newx, newy, visited)) {
+            output.push_back('U');
+            allPossiblePath(maze, newx, newy, visited, ans, output);
+            output.pop_back();
+        }
+
+        // ✅ Backtrack
+        visited[srcx][srcy] = false;
+    }
+
+    vector<string> ratInMaze(vector<vector<int>>& maze) {
+        vector<vector<bool>> visited(maze.size(), vector<bool>(maze[0].size(), false));
+        vector<string> ans;
+
+        if (maze[0][0] == 0) return {};
+
+        string output = "";
+        allPossiblePath(maze, 0, 0, visited, ans, output);
+
+        return ans;
+    }
+};
