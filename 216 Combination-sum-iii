@@ -1,0 +1,27 @@
+class Solution {
+public:
+    void combinationSum_healper(vector<vector<int>>&ans,vector<int>&vec,int k,int n,int i){
+        // base case
+        if(vec.size()==k){
+            if(n==0){
+                ans.push_back(vec);
+                return;
+            }
+            else return;
+        }
+
+        for(int j=i;j<=9;j++){
+            vec.push_back(j);
+            combinationSum_healper(ans,vec,k,n-j,j+1);
+            vec.pop_back();  // backtrack
+        }
+
+    }
+    vector<vector<int>> combinationSum3(int k, int n) {
+        vector<vector<int>>ans;
+        vector<int>vec;
+        combinationSum_healper(ans,vec,k,n,1);
+
+        return ans;
+    }
+};
