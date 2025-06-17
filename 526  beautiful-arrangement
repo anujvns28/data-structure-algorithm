@@ -1,0 +1,25 @@
+class Solution {
+public:
+    void countArrangement_healper(vector<int>&vec,int&n,int&ans,int currNumber){
+        //base case
+        if(currNumber == n+1){
+            ans++;
+            return;
+        }
+
+        for(int i=1;i<=n;i++){
+            if(vec[i]==0 && (i%currNumber==0 || currNumber%i==0)){
+                vec[i] = currNumber;
+                countArrangement_healper(vec,n,ans,currNumber+1);
+                vec[i]=0; // backtracking
+            }
+        }
+    }
+    int countArrangement(int n) {
+        vector<int>vec(n+1,0);
+        int ans= 0;
+        countArrangement_healper(vec,n,ans,1);
+
+        return ans;
+    }
+};
