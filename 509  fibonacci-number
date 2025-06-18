@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int fibUsingRec(int n){
+        if(n==0) return 0;
+        if(n==1) return 1;
+
+        return fibUsingRec(n-1) + fibUsingRec(n-2);
+    }
+
+    int fibUsingDpTopDown(vector<int>&dp,int n){
+        if(n==0 || n==1) return n;
+        // 3=>checking if solution of n persent
+        if(dp[n]!=-1){
+            return dp[n];
+        }
+
+        //2=> store in dp array
+        dp[n] = fibUsingDpTopDown(dp,n-1) + fibUsingDpTopDown(dp,n-2);
+        return dp[n];
+    }
+
+    int fibUsingDpBottomUp(int n){
+        // 1=> createing dp array
+        vector<int>dp(n+1,-1);
+
+        //2 => base case filling
+        dp[0] = 0;
+        dp[1] = 1;
+
+        // 3 remanning dp array solving
+        for(int index=2;index<=n;index++){
+            dp[index] = dp[index-1] + dp[index-2];
+        }
+        return dp[n];
+    }
+    
+    int fib(int n) {
+       if(n==0 || n==1) return n;
+       
+    // top down
+    // 1=> createing dp array
+    //    vector<int>dp(n+1,-1);
+    //    return fibUsingDpTopDown(dp,n);
+
+    // bottom up
+       return fibUsingDpBottomUp(n);
+    }
+};
