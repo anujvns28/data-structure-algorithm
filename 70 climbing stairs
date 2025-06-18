@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int climbStairsUsingDp(int n,vector<int>&dp){
+       //base case
+       if(n==1 || n==2) return n;
+
+       //3=> checking is already anser of n is present
+       if(dp[n]!=-1) return dp[n];
+
+       //2 => storing ans in dp array or vector
+       int step1 =  climbStairsUsingDp(n-1,dp);
+       int step2 = climbStairsUsingDp(n-2,dp);
+       
+       return dp[n] = step1+step2;
+    }
+
+    int climbStairsUsingDpBottomUp(int n){
+        //1 => createing vector
+        vector<int>dp(n+1,-1);
+
+        // 2 => storing base case
+        dp[1] = 1;
+        dp[2] = 2;
+
+        // 3 storing remanning
+        for(int index=3;index<=n;index++){
+            dp[index] = dp[index-1] + dp[index-2];
+        }
+        return dp[n];
+    }
+    int climbStairs(int n) {
+        if(n==1 || n==2) return n;
+        
+        // top down
+        //1=> create dp vector
+        // vector<int>dp(n+1,-1);
+        // return climbStairsUsingDp(n,dp);
+
+        //bottom up
+        return climbStairsUsingDpBottomUp(n);
+    }
+};
