@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int solve(vector<int>& cost,int index){
+        if(index >= cost.size()) return 0;
+        
+        int ans1 = cost[index]+ solve(cost,index+1);
+        int ans2 = cost[index]+ solve(cost,index+2);
+       
+        return min(ans1,ans2);
+    }
+
+    int solveUsingDpTopDown(vector<int>&cost,int index,vector<int>&dp){
+        if(index>=cost.size()) return 0;
+
+        //3=> checking present index
+        if(dp[index]!=-1){
+            return dp[index];
+        }
+
+        int ans1 = cost[index] + solveUsingDpTopDown(cost,index+1,dp);
+        int ans2 = cost[index] + solveUsingDpTopDown(cost,index+2,dp);
+
+        //2=> storing in dp
+        dp[index] = min(ans1,ans2);
+
+        return dp[index];
+    }
+    int minCostClimbingStairs(vector<int>& cost) {
+        // int ans1=  solve(cost,0);
+        // int ans2 = solve(cost,1);
+        // return min(ans1,ans2);
+        
+        //1=> creating vector for dp
+        vector<int>dp(cost.size()+1,-1);
+        int ans1 =  solveUsingDpTopDown(cost,0,dp);
+        int ans2 = solveUsingDpTopDown(cost,1,dp);
+        return min(ans1,ans2);
+    }
+};
