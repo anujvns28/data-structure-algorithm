@@ -1,0 +1,84 @@
+class Solution {
+public:
+    int coinChange_rec(vector<int>& coins, int amount){
+        //base case
+        if(amount==0) return 0;
+
+        int mini = INT_MAX;
+        for(int i=0;i<coins.size();i++){
+            if(coins[i]<=amount){
+                int recAns = coinChange_rec(coins,amount-coins[i]);
+                if(recAns!=INT_MAX){
+                    recAns = 1 + recAns;
+                    mini = min(mini,recAns);
+                }
+            }
+        }
+        return mini;
+    }
+
+    int coinChangeMem(vector<int>& coins, int amount,vector<int>&dp){
+       //base case
+        if(amount==0) return 0;
+
+        //3 step
+        if(dp[amount]!=-1){
+            return dp[amount];
+        }
+
+        int mini = INT_MAX;
+        for(int i=0;i<coins.size();i++){
+            if(coins[i]<=amount){
+                int recAns = coinChangeMem(coins,amount-coins[i],dp);
+                if(recAns!=INT_MAX){
+                    recAns = 1 + recAns;
+                    mini = min(mini,recAns);
+                }
+            }
+        }
+        // 2 step
+        dp[amount] = mini;
+        return dp[amount];
+    }
+
+    int coinChangeTabulation(vector<int>& coins, int amount){
+        //step 1
+        vector<int>dp(amount+1,INT_MAX);
+
+        // step2
+        dp[0] = 0;
+
+        for(int value=1;value<=amount;value++){
+
+            int mini = INT_MAX;
+
+            for(int i=0;i<coins.size();i++){
+                if(coins[i]<=value){
+                    int recAns = dp[value-coins[i]];
+                    if(recAns!=INT_MAX){
+                        recAns = 1 + recAns;
+                        mini = min(mini,recAns);
+                    }
+                }
+            }
+            dp[value] = mini;
+        }
+        int ans = dp[amount];
+         if(ans==INT_MAX) return -1;
+         else return ans;
+    }
+
+    int coinChange(vector<int>& coins, int amount) {
+    //    int ans = coinChange_rec(coins,amount); 
+    //    if(ans==INT_MAX) return -1;
+    //    else return ans;
+        
+        // 1 step
+        // vector<int>dp(amount+1,-1);
+        // int ans = coinChangeMem(coins,amount,dp);
+        // if(ans==INT_MAX) return -1;
+        // else return ans;
+
+        return coinChangeTabulation(coins,amount);
+    }
+};
