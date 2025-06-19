@@ -1,0 +1,55 @@
+class Solution {
+public:
+    int rob_healper(vector<int>&nums,int i){
+        // base case
+        if(i>=nums.size()) return 0;
+
+        int robAmt1 = nums[i] + rob_healper(nums,i+2);
+        int robAmt2 = 0 + rob_healper(nums,i+1);
+
+      return max(robAmt1,robAmt2);
+    }
+
+    int robAmountUsingTopDowon(vector<int>&nums,int index,vector<int>&dp){
+        // base case
+        if(index>=nums.size()) return 0;
+
+        if(dp[index]!=-1) return dp[index];
+
+        int robAmt1 = nums[index] + robAmountUsingTopDowon(nums,index+2,dp);
+        int robAmt2 = 0 + robAmountUsingTopDowon(nums,index+1,dp);
+
+        // stroring value
+        dp[index] = max(robAmt1,robAmt2);
+        
+        return dp[index];
+    }
+
+    int robAmountUsingTabulation(vector<int>& nums){
+        //step 1
+        vector<int>dp(nums.size()+1,-1);
+
+        // step2 
+        int n = nums.size();
+        dp[n] = 0;  // out of range no house no amount
+        dp[n-1] = nums[n-1];  // last house has onlye last money 
+
+        //step3;
+        for(int index=n-2;index>=0;index--){
+            int robAmt1 = nums[index] + dp[index+2];
+            int robAmt2 = 0 + dp[index+1];
+            dp[index] = max(robAmt1,robAmt2);
+        }
+        return dp[0];
+    }
+
+    int rob(vector<int>& nums) {
+        // return rob_healper(nums,0);
+
+        //dp top down
+        // vector<int>dp(nums.size()+1,-1);
+        // return robAmountUsingTopDowon(nums,0,dp);
+
+        return robAmountUsingTabulation(nums);
+    }
+};
