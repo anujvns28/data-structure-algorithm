@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int solve_usingRec(vector<int>&nums,int target,int index){
+        if(target==0) return 1;
+        
+        int ans = 0;
+        for(int i=0;i<nums.size();i++){
+            if(nums[i]<=target){
+                ans = ans + solve_usingRec(nums,target-nums[i],i);
+            } 
+        }  
+
+        return ans;
+    }
+    int solve_usingMem(vector<int>&nums,int target,int index,vector<int>&dp){
+        if(target==0) return 1;
+
+        if(dp[target]!=-1) return dp[target];
+        
+        int ans = 0;
+        for(int i=0;i<nums.size();i++){
+            if(nums[i]<=target){
+                ans = ans + solve_usingMem(nums,target-nums[i],i,dp);
+            } 
+        }  
+
+        dp[target] = ans;
+        return dp[target]; 
+    }
+
+
+    int combinationSum4(vector<int>& nums, int target) {
+        // return solve_usingRec(nums,target,0);
+
+        // vector<int>dp(target+1,-1);
+        // int ans = solve_usingMem(nums,target,0,dp);
+
+        return solve_usingTabulation(nums,target);
+    }
+};
