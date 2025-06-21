@@ -1,0 +1,71 @@
+class Solution {
+public:
+    int solve_usingRec1(vector<int>&nums,int target,int index,int length){
+        //base case 
+        if(target==0){
+            return length;
+        }
+        
+        int maxi = INT_MIN;
+        for(int i=index;i<nums.size();i++){
+           if(nums[i]<=target){
+                int ans = solve_usingRec1(nums,target-nums[i],i+1,length+1);
+                maxi = max(maxi,ans);
+           }
+        }
+
+        return maxi;
+    }
+
+    int solve_usingRec2(vector<int>&nums,int target,int index){
+        //base case 
+        if(target==0) return 0;
+        if(index>=nums.size()) return INT_MIN;
+
+        // one case
+        int include = INT_MIN;
+        if(nums[index]<=target){
+            int recAns = solve_usingRec2(nums,target-nums[index],index+1);
+            if(recAns != INT_MIN){
+                include = 1 + recAns;
+            }
+        }
+        int exclude = solve_usingRec2(nums,target,index+1);
+
+        return max(include,exclude);
+    }
+
+    int solve_usingMemo(vector<int>&nums,int target,int index,vector<vector<int>>&dp){
+        //base case 
+        if(target==0) return 0;
+        if(index>=nums.size()) return INT_MIN;
+
+        if(dp[target][index]!=-1) return dp[target][index];
+
+        // one case
+        int include = INT_MIN;
+        if(nums[index]<=target){
+            int recAns = solve_usingMemo(nums,target-nums[index],index+1,dp);
+            if(recAns != INT_MIN){
+                include = 1 + recAns;
+            }
+        }
+        int exclude = solve_usingMemo(nums,target,index+1,dp);
+
+        dp[target][index] = max(include,exclude);
+        return dp[target][index];
+    }
+
+    int lengthOfLongestSubsequence(vector<int>& nums, int target) {
+        // int ans = solve_usingRec2(nums,target,0);
+        
+        // if(ans==INT_MIN) return -1;
+        // else return ans;
+
+        vector<vector<int>>dp(target+1,vector<int>(nums.size(),-1));
+        int ans =  solve_usingMemo(nums,target,0,dp);
+        if(ans==INT_MIN) return -1;
+        else return ans;
+
+    }
+};
