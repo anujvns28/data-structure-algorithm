@@ -1,0 +1,55 @@
+class Solution {
+public:
+    bool solve_usingRec(string&s,string&p,int i,int j){
+        // base case
+        if(j == p.size()){
+            if(i==s.size()) return true;
+            else return false;
+        }
+        
+        bool isFirstCharMatch = false;
+        if(i<s.size() && (p[j]=='.' || p[j]==s[i])) {
+            isFirstCharMatch = true;
+        }
+
+        if(p[j+1]=='*'){
+           bool not_take = solve_usingRec(s,p,i,j+2);
+           bool take = isFirstCharMatch && solve_usingRec(s,p,i+1,j);
+
+           return not_take || take;
+        }
+
+        return isFirstCharMatch && solve_usingRec(s,p,i+1,j+1);
+    }
+
+    bool solve_usingMemozation(string&s,string&p,int i,int j,vector<vector<int>>&dp){
+        // base case
+        if(j == p.size()){
+            if(i==s.size()) return true;
+            else return false;
+        }
+
+        if( dp[i][j]!= -1) return dp[i][j];
+        
+        bool isFirstCharMatch = false;
+        if(i<s.size() && (p[j]=='.' || p[j]==s[i])) {
+            isFirstCharMatch = true;
+        }
+
+        if(p[j+1]=='*'){
+           bool not_take = solve_usingMemozation(s,p,i,j+2,dp);
+           bool take = isFirstCharMatch && solve_usingMemozation(s,p,i+1,j,dp);
+
+           return not_take || take;
+        }
+
+        dp[i][j] = isFirstCharMatch && solve_usingMemozation(s,p,i+1,j+1,dp);
+        return dp[i][j];
+    }
+    bool isMatch(string s, string p) {
+        // return solve_usingRec(s,p,0,0);
+
+        vector<vector<int>>dp(s.size()+1,vector<int>(p.size()+1,-1));
+        return solve_usingMemozation(s,p,0,0,dp);
+    }
+};
