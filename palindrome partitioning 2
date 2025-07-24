@@ -1,0 +1,57 @@
+class Solution {
+public:
+    vector<vector<int>>isPalindrome;
+
+    // int solve_usingrec(string&s,int index){
+    //    if(index>=s.size()) return -1;
+
+    //    int ans = INT_MAX;
+    //    for(int i=index;i<s.size();i++){
+    //       if(isPalindrome(s,index,i)){
+    //          int recAns = 1 + solve_usingrec(s,i+1);
+    //          ans = min(ans,recAns);
+    //       }
+    //    }
+
+    //    return ans;
+    // }
+
+    int solve_usingmemo(string&s,int index,vector<int>&dp){
+        if(index>=s.size()) return -1;
+        
+        if(dp[index] != -1) return dp[index];
+
+       int ans = INT_MAX;
+       for(int i=index;i<s.size();i++){
+          if(isPalindrome[index][i]){
+             int recAns = 1 + solve_usingmemo(s,i+1,dp);
+             ans = min(ans,recAns);
+          }
+       }
+
+       return dp[index] = ans;
+    }
+
+    int minCut(string s) {
+    //    return solve_usingrec(s,0);
+        int n = s.size();
+        isPalindrome.resize(n,vector<int>(n,-1));
+
+        for(int L=1;L<=n;L++){
+            for(int i=0;i+L-1<n;i++){
+                int j = i+L-1;
+
+                if(i==j){
+                    isPalindrome[i][j] = true;
+                }else if(i+1==j){
+                    isPalindrome[i][j] = s[i] == s[j];
+                }else{
+                    isPalindrome[i][j] = s[i] == s[j] && isPalindrome[i+1][j-1];
+                }
+            }
+        }
+
+        vector<int>dp(s.size()+1,-1);
+        return solve_usingmemo(s,0,dp);
+    }
+};
